@@ -124,6 +124,12 @@
     --sidebar-border: hsl(0 0% 91%);
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
     --sidebar: hsl(0 0% 98%);
+    --portfolio-green: #22c55e;
+    --portfolio-deep-green: #15803d;
+    --portfolio-mint: #86efac;
+    --portfolio-yellow: #fde047;
+    --portfolio-background: #f0fdf4;
+    --portfolio-text: #14532d;
 }
 
 .dark {
@@ -160,6 +166,12 @@
     --sidebar-border: hsl(0 0% 15.9%);
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
     --sidebar: hsl(240 5.9% 10%);
+    --portfolio-green: #16a34a;
+    --portfolio-deep-green: #14532d;
+    --portfolio-mint: #4ade80;
+    --portfolio-yellow: #facc15;
+    --portfolio-background: #052e16;
+    --portfolio-text: #dcfce7;
 }
 
 @layer base {
