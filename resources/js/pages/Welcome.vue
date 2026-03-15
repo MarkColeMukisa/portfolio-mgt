@@ -1,9 +1,23 @@
 <script setup lang="ts">
 import { Head, Link, usePage } from '@inertiajs/vue3';
-import { ArrowRight, Layers3, Sparkles, UploadCloud } from 'lucide-vue-next';
+import {
+    ArrowRight,
+    Layers3,
+    Menu,
+    Sparkles,
+    UploadCloud,
+} from 'lucide-vue-next';
 import { computed } from 'vue';
 import ProjectCard from '@/components/portfolio/ProjectCard.vue';
 import { Button } from '@/components/ui/button';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { dashboard, home, login, register } from '@/routes';
 import type {
     PortfolioProject,
@@ -65,7 +79,7 @@ const statCards = computed(() => [
             class="pointer-events-none absolute inset-x-0 top-0 h-[34rem] bg-[radial-gradient(circle_at_top_left,rgba(134,239,172,0.7),transparent_45%),radial-gradient(circle_at_top_right,rgba(253,224,71,0.45),transparent_32%)]"
         />
         <div
-            class="pointer-events-none absolute top-24 left-1/2 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-[linear-gradient(135deg,var(--portfolio-green)_0%,var(--portfolio-mint)_60%,var(--portfolio-yellow)_100%)] opacity-20 blur-3xl"
+            class="pointer-events-none absolute top-24 left-1/2 h-[20rem] w-[20rem] -translate-x-1/2 rounded-full bg-[linear-gradient(135deg,var(--portfolio-green)_0%,var(--portfolio-mint)_60%,var(--portfolio-yellow)_100%)] opacity-20 blur-3xl md:h-[28rem] md:w-[28rem]"
         />
 
         <div class="relative">
@@ -73,9 +87,9 @@ const statCards = computed(() => [
                 class="border-b border-[#bbf7d0]/70 bg-white/70 backdrop-blur-xl dark:border-[#166534] dark:bg-[#052e16]/80"
             >
                 <div
-                    class="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-5 lg:px-8"
+                    class="mx-auto flex w-full max-w-7xl flex-col gap-4 px-6 py-5 md:flex-row md:items-center md:justify-between lg:px-8"
                 >
-                    <div>
+                    <div class="min-w-0">
                         <p
                             class="text-xs font-semibold tracking-[0.3em] text-[#16a34a] uppercase dark:text-[#86efac]"
                         >
@@ -88,7 +102,70 @@ const statCards = computed(() => [
                         </h1>
                     </div>
 
-                    <nav class="flex items-center gap-3">
+                    <div class="flex w-full items-center justify-end md:hidden">
+                        <DropdownMenu>
+                            <DropdownMenuTrigger :as-child="true">
+                                <Button
+                                    variant="outline"
+                                    class="rounded-full border-[#16a34a]/20 bg-white/90 px-4 text-[#166534] shadow-sm hover:bg-[#f0fdf4] dark:border-[#15803d] dark:bg-[#14532d] dark:text-[#dcfce7] dark:hover:bg-[#166534]"
+                                >
+                                    <Menu class="size-4" />
+                                    Menu
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent
+                                align="end"
+                                class="w-56 rounded-2xl border-[#bbf7d0] bg-white/95 p-2 shadow-[0_24px_80px_-44px_rgba(21,83,45,0.45)] dark:border-[#166534] dark:bg-[#052e16]/95"
+                            >
+                                <DropdownMenuLabel
+                                    class="px-3 py-2 text-xs font-semibold tracking-[0.24em] text-[#16a34a] uppercase dark:text-[#86efac]"
+                                >
+                                    {{ authUser ? 'Workspace' : 'Account' }}
+                                </DropdownMenuLabel>
+
+                                <DropdownMenuSeparator />
+
+                                <DropdownMenuItem
+                                    v-if="authUser"
+                                    :as-child="true"
+                                >
+                                    <Link
+                                        :href="dashboard()"
+                                        prefetch
+                                        class="flex w-full items-center justify-between rounded-xl px-3 py-2 font-medium text-[#166534] dark:text-[#dcfce7]"
+                                    >
+                                        Dashboard
+                                        <ArrowRight class="size-4" />
+                                    </Link>
+                                </DropdownMenuItem>
+
+                                <template v-else>
+                                    <DropdownMenuItem :as-child="true">
+                                        <Link
+                                            :href="login()"
+                                            class="flex w-full items-center rounded-xl px-3 py-2 font-medium text-[#166534] dark:text-[#dcfce7]"
+                                        >
+                                            Log in
+                                        </Link>
+                                    </DropdownMenuItem>
+
+                                    <DropdownMenuItem
+                                        v-if="canRegister"
+                                        :as-child="true"
+                                    >
+                                        <Link
+                                            :href="register()"
+                                            class="flex w-full items-center rounded-xl bg-[linear-gradient(135deg,var(--portfolio-green)_0%,var(--portfolio-mint)_60%,var(--portfolio-yellow)_100%)] px-3 py-2 font-semibold text-[#14532D]"
+                                        >
+                                            Create account
+                                        </Link>
+                                    </DropdownMenuItem>
+                                </template>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
+
+                    <nav class="hidden items-center gap-3 md:flex md:flex-wrap md:justify-end">
                         <Link
                             v-if="authUser"
                             :href="dashboard()"
