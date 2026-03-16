@@ -3,12 +3,66 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { useInitials } from '@/composables/useInitials';
 import type { PortfolioProject } from '@/types';
+import { computed } from 'vue';
 
-defineProps<{
+const props = defineProps<{
     project: PortfolioProject;
 }>();
 
 const { getInitials } = useInitials();
+const relativeTimeFormatter = new Intl.RelativeTimeFormat('en', {
+    numeric: 'always',
+});
+
+const createdAtLabel = computed<string | null>(() => {
+    if (!props.project.created_at) {
+        return null;
+    }
+
+    return formatRelativeTime(props.project.created_at);
+});
+
+function formatRelativeTime(value: string): string {
+    const createdAt = new Date(value);
+    const elapsedSeconds = (createdAt.getTime() - Date.now()) / 1000;
+
+    if (Math.abs(elapsedSeconds) < 60) {
+        return 'just now';
+    }
+
+    const elapsedMinutes = truncateUnit(elapsedSeconds / 60);
+    const elapsedHours = truncateUnit(elapsedSeconds / (60 * 60));
+    const elapsedDays = truncateUnit(elapsedSeconds / (60 * 60 * 24));
+    const elapsedWeeks = truncateUnit(elapsedSeconds / (60 * 60 * 24 * 7));
+    const elapsedMonths = truncateUnit(elapsedSeconds / (60 * 60 * 24 * 30));
+    const elapsedYears = truncateUnit(elapsedSeconds / (60 * 60 * 24 * 365));
+
+    if (Math.abs(elapsedMinutes) < 60) {
+        return relativeTimeFormatter.format(elapsedMinutes, 'minute');
+    }
+
+    if (Math.abs(elapsedHours) < 24) {
+        return relativeTimeFormatter.format(elapsedHours, 'hour');
+    }
+
+    if (Math.abs(elapsedDays) < 7) {
+        return relativeTimeFormatter.format(elapsedDays, 'day');
+    }
+
+    if (Math.abs(elapsedWeeks) < 4) {
+        return relativeTimeFormatter.format(elapsedWeeks, 'week');
+    }
+
+    if (Math.abs(elapsedMonths) < 12) {
+        return relativeTimeFormatter.format(elapsedMonths, 'month');
+    }
+
+    return relativeTimeFormatter.format(elapsedYears, 'year');
+}
+
+function truncateUnit(value: number): number {
+    return value < 0 ? Math.ceil(value) : Math.floor(value);
+}
 </script>
 
 <template>
@@ -63,11 +117,19 @@ const { getInitials } = useInitials();
             </div>
 
             <div class="space-y-2">
-                <h3
-                    class="text-xl font-semibold tracking-tight text-[#14532d] dark:text-white"
-                >
-                    {{ project.title }}
-                </h3>
+                <div class="flex items-start justify-between gap-3">
+                    <h3
+                        class="text-xl font-semibold tracking-tight text-[#14532d] dark:text-white"
+                    >
+                        {{ project.title }}
+                    </h3>
+                    <span
+                        v-if="createdAtLabel"
+                        class="shrink-0 rounded-full bg-[#dcfce7] px-2.5 py-1 text-[11px] font-medium text-[#166534] dark:bg-[#14532d] dark:text-[#86efac]"
+                    >
+                        {{ createdAtLabel }}
+                    </span>
+                </div>
                 <p
                     class="line-clamp-3 text-sm leading-6 text-[#166534]/85 dark:text-[#dcfce7]/80"
                 >

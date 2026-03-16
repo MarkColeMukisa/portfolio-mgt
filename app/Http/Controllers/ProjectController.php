@@ -151,6 +151,7 @@ class ProjectController extends Controller
         return [
             'id' => $project->id,
             'title' => $project->title,
+            'created_at' => $project->created_at?->toIso8601String(),
             'description' => $project->description,
             'description_preview' => Str::limit($project->description, 110),
             'image_url' => $project->image_url,

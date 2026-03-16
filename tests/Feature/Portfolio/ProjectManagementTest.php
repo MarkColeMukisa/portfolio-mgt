@@ -5,12 +5,17 @@ use App\Models\Tag;
 use App\Models\User;
 use App\Services\CloudinaryMediaService;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Carbon;
 use Inertia\Testing\AssertableInertia as Assert;
 use Mockery\MockInterface;
 
 test('guests can view the public portfolio grid', function () {
+    $createdAt = Carbon::parse('2026-03-16 08:00:00');
+
     $project = Project::factory()->for(User::factory()->create())->create([
         'title' => 'Launch metrics board',
+        'created_at' => $createdAt,
+        'updated_at' => $createdAt,
     ]);
 
     $tag = Tag::factory()->create(['name' => 'analytics', 'slug' => 'analytics']);
@@ -21,6 +26,7 @@ test('guests can view the public portfolio grid', function () {
     $response->assertOk()->assertInertia(fn (Assert $page) => $page
         ->component('Welcome')
         ->where('projects.data.0.title', 'Launch metrics board')
+        ->where('projects.data.0.created_at', $createdAt->toIso8601String())
         ->where('featuredTags.0.name', 'analytics'));
 });
 

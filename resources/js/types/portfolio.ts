@@ -7,6 +7,7 @@ export type PortfolioTag = {
 export type PortfolioProject = {
     id: number;
     title: string;
+    created_at: string | null;
     description: string;
     description_preview: string;
     image_url: string;
