@@ -24,6 +24,7 @@ export type PortfolioProject = {
         avatar: string | null;
     };
     can: {
+        update: boolean;
         delete: boolean;
     };
 };

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProjectRequest;
+use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
 use App\Models\Tag;
 use App\Models\User;
@@ -104,6 +105,53 @@ class ProjectController extends Controller
     }
 
     /**
+     * Update the selected project.
+     */
+    public function update(UpdateProjectRequest $request, Project $project): RedirectResponse
+    {
+        $this->authorize('update', $project);
+
+        $replacementAssets = $request->hasFile('image')
+            ? $this->cloudinaryMediaService->uploadProjectAssets($request->file('image'), $request->user())
+            : null;
+
+        try {
+            DB::transaction(function () use ($project, $request, $replacementAssets): void {
+                $previousImagePublicId = $project->image_public_id;
+                $previousThumbnailPublicId = $project->thumbnail_public_id;
+
+                $project->update([
+                    'title' => $request->string('title')->trim()->value(),
+                    'description' => $request->string('description')->trim()->value(),
+                    ...($replacementAssets ?? []),
+                ]);
+
+                $project->tags()->sync($this->resolveTagIds($request->validated('tags')));
+
+                if ($replacementAssets !== null) {
+                    DB::afterCommit(function () use ($previousImagePublicId, $previousThumbnailPublicId): void {
+                        try {
+                            $this->cloudinaryMediaService->destroy($previousImagePublicId);
+                            $this->cloudinaryMediaService->destroy($previousThumbnailPublicId);
+                        } catch (\Throwable $exception) {
+                            report($exception);
+                        }
+                    });
+                }
+            });
+        } catch (\Throwable $exception) {
+            if ($replacementAssets !== null) {
+                $this->cloudinaryMediaService->destroy($replacementAssets['image_public_id']);
+                $this->cloudinaryMediaService->destroy($replacementAssets['thumbnail_public_id']);
+            }
+
+            throw $exception;
+        }
+
+        return to_route('dashboard')->with('success', 'Project updated.');
+    }
+
+    /**
      * Delete the selected project.
      */
     public function destroy(Project $project): RedirectResponse
@@ -169,6 +217,7 @@ class ProjectController extends Controller
                 'avatar' => $project->user->profile_photo_url,
             ],
             'can' => [
+                'update' => $viewer?->can('update', $project) ?? false,
                 'delete' => $viewer?->can('delete', $project) ?? false,
             ],
         ];

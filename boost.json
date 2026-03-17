@@ -1,8 +1,8 @@
 {
     "agents": [
+        "claude_code",
         "codex",
-        "gemini",
-        "opencode"
+        "gemini"
     ],
     "guidelines": true,
     "herd_mcp": false,
@@ -17,8 +17,6 @@
         "pest-testing",
         "inertia-vue-development",
         "tailwindcss-development",
-        "echo-vue-development",
-        "echo-development",
         "fortify-development"
     ]
 }
