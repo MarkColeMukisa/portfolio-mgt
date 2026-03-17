@@ -9,7 +9,7 @@ The Laravel Boost guidelines are specifically curated by Laravel maintainers for
 
 This application is a Laravel application and its main Laravel ecosystems package & versions are below. You are an expert with them all. Ensure you abide by these specific packages & versions.
 
-- php - 8.5.3
+- php - 8.5.4
 - inertiajs/inertia-laravel (INERTIA_LARAVEL) - v2
 - laravel/fortify (FORTIFY) - v1
 - laravel/framework (LARAVEL) - v12
@@ -25,8 +25,10 @@ This application is a Laravel application and its main Laravel ecosystems packag
 - \@inertiajs/vue3 (INERTIA_VUE) - v2
 - tailwindcss (TAILWINDCSS) - v4
 - vue (VUE) - v3
+- \@laravel/echo-vue (ECHO_VUE) - v2
 - \@laravel/vite-plugin-wayfinder (WAYFINDER_VITE) - v0
 - eslint (ESLINT) - v9
+- laravel-echo (ECHO) - v2
 - prettier (PRETTIER) - v3
 
 ## Skills Activation
@@ -37,6 +39,8 @@ This project has domain-specific skills available. You MUST activate the relevan
 - `pest-testing` — Tests applications using the Pest 4 PHP framework. Activates when writing tests, creating unit or feature tests, adding assertions, testing Livewire components, browser testing, debugging test failures, working with datasets or mocking; or when the user mentions test, spec, TDD, expects, assertion, coverage, or needs to verify functionality works.
 - `inertia-vue-development` — Develops Inertia.js v2 Vue client-side applications. Activates when creating Vue pages, forms, or navigation; using <Link>, <Form>, useForm, or router; working with deferred props, prefetching, or polling; or when user mentions Vue with Inertia, Vue pages, Vue forms, or Vue navigation.
 - `tailwindcss-development` — Styles applications using Tailwind CSS v4 utilities. Activates when adding styles, restyling components, working with gradients, spacing, layout, flex, grid, responsive design, dark mode, colors, typography, or borders; or when the user mentions CSS, styling, classes, Tailwind, restyle, hero section, cards, buttons, or any visual/UI changes.
+- `echo-vue-development` — Develops real-time broadcasting in Vue applications with Laravel Echo. Activates when configuring Echo in Vue (configureEcho); using composables (useEcho, useEchoPublic, useEchoPresence, useEchoModel, useEchoNotification, useConnectionStatus); listening for broadcast events in Vue components; implementing client events (whisper) in Vue; or when the user mentions Echo with Vue, real-time Vue composables, or broadcasting in Vue components.
+- `echo-development` — Develops real-time broadcasting with Laravel Echo. Activates when setting up broadcasting (Reverb, Pusher, Ably); creating ShouldBroadcast events; defining broadcast channels (public, private, presence, encrypted); authorizing channels; configuring Echo; listening for events; implementing client events (whisper); setting up model broadcasting; broadcasting notifications; or when the user mentions broadcasting, Echo, WebSockets, real-time events, Reverb, or presence channels.
 - `fortify-development` — Laravel Fortify headless authentication backend development. Activate when implementing authentication features including login, registration, password reset, email verification, two-factor authentication (2FA/TOTP), profile updates, headless auth, authentication scaffolding, or auth guards in Laravel applications.
 
 ## Conventions
@@ -146,6 +150,13 @@ protected function isAccessible(User $user, ?string $path = null): bool
 ## PHPDoc Blocks
 
 - Add useful array shape type definitions when appropriate.
+
+=== herd rules ===
+
+# Laravel Herd
+
+- The application is served by Laravel Herd and will be available at: `https?://[kebab-case-project-dir].test`. Use the `get-absolute-url` tool to generate valid URLs for the user.
+- You must not run any commands to make the site available via HTTP(S). It is always available through Laravel Herd.
 
 === tests rules ===
 

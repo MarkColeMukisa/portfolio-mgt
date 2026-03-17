@@ -108,11 +108,6 @@ function truncateUnit(value: number): number {
                     >
                         {{ project.author.name }}
                     </p>
-                    <p
-                        class="text-xs tracking-[0.24em] text-[#16a34a] uppercase dark:text-[#86efac]"
-                    >
-                        Portfolio highlight
-                    </p>
                 </div>
             </div>
 
